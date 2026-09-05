@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050f1f" />
+  <meta name="format-detection" content="telephone=no, email=no, address=no" />
+
+  <!-- 严格 CSP：禁内联脚本/样式，只允许本站资源 + data: 图片 -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none';
+                 style-src 'self';
+                 script-src 'self';
+                 img-src 'self' data:;
+                 font-src 'self';
+                 connect-src 'none';
+                 base-uri 'none';
+                 form-action 'none';
+                 frame-ancestors 'none';
+                 object-src 'none';" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), midi=()" />
+
+  <title>kk tools · 工具箱</title>
+  <meta name="description" content="kk 个人工具箱：密码生成器 + 编解码工具" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 玻璃背景 -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="orbit">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="blob b4"></div>
+    </div>
+  </div>
+
+  <main class="stage" role="main">
+
+    <!-- 顶部玻璃标题 -->
+    <header class="hero">
+      <h1 class="title" role="img" aria-label="kk tools 液态玻璃标题">
+        <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="body" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#ffffff" stop-opacity=".60"/>
+              <stop offset="38%"  stop-color="#f3f8ff" stop-opacity=".42"/>
+              <stop offset="70%"  stop-color="#e8f1fd" stop-opacity=".34"/>
+              <stop offset="100%" stop-color="#d6e6fa" stop-opacity=".46"/>
+            </linearGradient>
+            <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="28%"  stop-color="#ffffff" stop-opacity="1"/>
+              <stop offset="50%"  stop-color="#ffffff" stop-opacity=".4"/>
+              <stop offset="75%"  stop-color="#ffffff" stop-opacity=".75"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="edgeLine" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#ffffff" stop-opacity=".9"/>
+              <stop offset="55%"  stop-color="#ffffff" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#cfe3ff" stop-opacity=".55"/>
+            </linearGradient>
+          </defs>
+          <text x="500" y="120" text-anchor="middle" dominant-baseline="central"
+                font-family="-apple-system, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+                font-weight="700" font-size="150" letter-spacing="-3"
+                fill="url(#body)">kk tools</text>
+          <text x="500" y="120" text-anchor="middle" dominant-baseline="central"
+                font-family="-apple-system, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+                font-weight="700" font-size="150" letter-spacing="-3"
+                fill="none" stroke="url(#edgeLine)" stroke-width="2.4"
+                stroke-linejoin="round" stroke-linecap="round" opacity=".95">kk tools</text>
+          <text x="500" y="120" text-anchor="middle" dominant-baseline="central"
+                font-family="-apple-system, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+                font-weight="700" font-size="150" letter-spacing="-3"
+                fill="none" stroke="url(#rimGrad)" stroke-width="2.0"
+                stroke-linejoin="round" stroke-linecap="round" opacity=".95">kk tools</text>
+        </svg>
+      </h1>
+      <p class="subtitle">液态玻璃外壳 · 纯静态 · 密码 + 编解码</p>
+    </header>
+
+    <!-- 工具 tab -->
+    <nav class="tabs" role="tablist" aria-label="工具切换">
+      <button type="button" class="tab" role="tab" aria-selected="true"  data-tool="password" id="tab-password">🔐 密码生成器</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tool="codec"     id="tab-codec">🔄 编解码工具</button>
+    </nav>
+
+    <!-- =================================== -->
+    <!-- 工具 1：密码生成器                    -->
+    <!-- =================================== -->
+    <section class="panel" id="panel-password" role="tabpanel" aria-labelledby="tab-password">
+      <article class="card single-card">
+        <div class="card-head">
+          <h2 class="card-title">密码生成器</h2>
+          <button type="button" class="btn-ghost" id="pw-history-clear" title="清空历史">清空记录</button>
+        </div>
+
+        <!-- 输出区 -->
+        <div class="pw-output-row">
+          <input type="text" class="pw-output" id="pw-output" readonly placeholder="点击下方「生成」…" aria-label="生成的密码" />
+          <button type="button" class="btn-primary" id="pw-copy" title="复制">复制</button>
+          <button type="button" class="btn-ghost"   id="pw-regen" title="重新生成">↻</button>
+        </div>
+
+        <!-- 强度条 -->
+        <div class="pw-strength-row">
+          <div class="pw-strength-bar"><div class="pw-strength-fill" id="pw-strength-fill"></div></div>
+          <span class="pw-strength-label" id="pw-strength-label">未生成</span>
+        </div>
+
+        <!-- 长度 -->
+        <div class="pw-control">
+          <div class="pw-control-head">
+            <label for="pw-length">长度</label>
+            <span class="pw-length-val" id="pw-length-val">16</span>
+          </div>
+          <input type="range" class="pw-slider" id="pw-length" min="4" max="64" step="1" value="16" />
+        </div>
+
+        <!-- 字符集 -->
+        <div class="pw-control">
+          <label>字符集</label>
+          <div class="pw-charset">
+            <label class="pw-check">
+              <input type="checkbox" id="pw-upper" checked />
+              <span>大写 A-Z</span>
+            </label>
+            <label class="pw-check">
+              <input type="checkbox" id="pw-lower" checked />
+              <span>小写 a-z</span>
+            </label>
+            <label class="pw-check">
+              <input type="checkbox" id="pw-digit" checked />
+              <span>数字 0-9</span>
+            </label>
+            <label class="pw-check">
+              <input type="checkbox" id="pw-symbol" checked />
+              <span>符号 !@#…</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 选项 -->
+        <div class="pw-control">
+          <label>选项</label>
+          <div class="pw-charset">
+            <label class="pw-check">
+              <input type="checkbox" id="pw-no-ambiguous" />
+              <span>排除易混字符 (0OoIl1)</span>
+            </label>
+            <label class="pw-check">
+              <input type="checkbox" id="pw-no-repeat" />
+              <span>字符不重复</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 生成按钮 -->
+        <div class="pw-generate-row">
+          <button type="button" class="btn-primary btn-large" id="pw-generate">🎲 生成密码</button>
+        </div>
+
+        <!-- 历史 -->
+        <div class="pw-history">
+          <div class="pw-history-head">
+            <label>本次会话历史</label>
+            <span class="meta" id="pw-history-count">0 条</span>
+          </div>
+          <ul class="pw-history-list" id="pw-history-list" aria-label="密码历史"></ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- =================================== -->
+    <!-- 工具 2：编解码                       -->
+    <!-- =================================== -->
+    <section class="panel hidden" id="panel-codec" role="tabpanel" aria-labelledby="tab-codec">
+
+      <!-- 模式选择 -->
+      <nav class="codec-tabs" role="tablist" aria-label="编码模式">
+        <button type="button" class="codec-tab" role="tab" aria-selected="true"  data-mode="base64">Base64</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="url">URL Encode</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="html">HTML Entity</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="json">JSON 美化</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="jwt">JWT 解析</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="hash">文本 Hash</button>
+      </nav>
+
+      <article class="card single-card">
+
+        <!-- Base64 / URL / HTML / JSON 模式：左右双栏 -->
+        <div class="codec-grid" id="codec-grid">
+          <div class="codec-side">
+            <div class="codec-side-head">
+              <label for="codec-input">原文</label>
+              <div class="codec-side-actions">
+                <button type="button" class="btn-ghost btn-mini" id="codec-input-clear" title="清空">✕</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-input-paste" title="粘贴">📋</button>
+              </div>
+            </div>
+            <textarea class="codec-input" id="codec-input" placeholder="输入要编码或解码的文本…" spellcheck="false"></textarea>
+            <div class="codec-meta"><span id="codec-input-meta">0 字符</span></div>
+          </div>
+
+          <div class="codec-side">
+            <div class="codec-side-head">
+              <label for="codec-output">结果</label>
+              <div class="codec-side-actions">
+                <button type="button" class="btn-ghost btn-mini" id="codec-swap" title="交换">⇅</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-copy" title="复制">复制</button>
+              </div>
+            </div>
+            <textarea class="codec-output" id="codec-output" readonly placeholder="结果会显示在这里…" spellcheck="false"></textarea>
+            <div class="codec-meta"><span id="codec-output-meta">0 字符</span><span id="codec-status" class="codec-status"></span></div>
+          </div>
+        </div>
+
+        <!-- 模式说明 -->
+        <div class="codec-help" id="codec-help">
+          提示：在左侧输入原文，右侧会自动显示编码或解码结果。点击 ⇅ 可把结果送到左边继续处理。
+        </div>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <small>kk tools · 2026 · 纯前端，0 网络请求</small>
+    </footer>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
