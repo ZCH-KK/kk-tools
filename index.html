@@ -42,8 +42,14 @@
 
   <main class="stage" role="main">
 
-    <!-- 顶部玻璃标题 -->
+    <!-- 顶部玻璃标题 + 语言切换 -->
     <header class="hero">
+      <div class="lang-switch" role="group" aria-label="语言切换 / Language">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中</button>
+        <span class="lang-divider" aria-hidden="true">/</span>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+
       <h1 class="title" role="img" aria-label="kk tools 液态玻璃标题">
         <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
@@ -82,13 +88,22 @@
                 stroke-linejoin="round" stroke-linecap="round" opacity=".95">kk tools</text>
         </svg>
       </h1>
-      <p class="subtitle">液态玻璃外壳 · 纯静态 · 密码 + 编解码</p>
+      <p class="subtitle"
+         data-zh="液态玻璃外壳 · 纯静态 · 密码 + 编解码"
+         data-en="Liquid Glass · Fully Static · Password + Codec">液态玻璃外壳 · 纯静态 · 密码 + 编解码</p>
     </header>
 
     <!-- 工具 tab -->
-    <nav class="tabs" role="tablist" aria-label="工具切换">
-      <button type="button" class="tab" role="tab" aria-selected="true"  data-tool="password" id="tab-password">🔐 密码生成器</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tool="codec"     id="tab-codec">🔄 编解码工具</button>
+    <nav class="tabs" role="tablist"
+         aria-label="工具切换"
+         data-zh-aria="工具切换"
+         data-en-aria="Tool Switch">
+      <button type="button" class="tab" role="tab" aria-selected="true"  data-tool="password" id="tab-password"
+              data-zh="🔐 密码生成器"
+              data-en="🔐 Password Generator">🔐 密码生成器</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tool="codec"     id="tab-codec"
+              data-zh="🔄 编解码工具"
+              data-en="🔄 Codec Tool">🔄 编解码工具</button>
     </nav>
 
     <!-- =================================== -->
@@ -97,27 +112,49 @@
     <section class="panel" id="panel-password" role="tabpanel" aria-labelledby="tab-password">
       <article class="card single-card">
         <div class="card-head">
-          <h2 class="card-title">密码生成器</h2>
-          <button type="button" class="btn-ghost" id="pw-history-clear" title="清空历史">清空记录</button>
+          <h2 class="card-title"
+              data-zh="密码生成器"
+              data-en="Password Generator">密码生成器</h2>
+          <button type="button" class="btn-ghost" id="pw-history-clear"
+                  data-zh="清空记录"
+                  data-en="Clear"
+                  title-zh="清空历史"
+                  title-en="Clear history">清空记录</button>
         </div>
 
         <!-- 输出区 -->
         <div class="pw-output-row">
-          <input type="text" class="pw-output" id="pw-output" readonly placeholder="点击下方「生成」…" aria-label="生成的密码" />
-          <button type="button" class="btn-primary" id="pw-copy" title="复制">复制</button>
-          <button type="button" class="btn-ghost"   id="pw-regen" title="重新生成">↻</button>
+          <input type="text" class="pw-output" id="pw-output" readonly
+                 data-zh-placeholder="点击下方「生成」…"
+                 data-en-placeholder="Click Generate…"
+                 aria-label-zh="生成的密码"
+                 aria-label-en="Generated password" />
+          <button type="button" class="btn-primary" id="pw-copy"
+                  data-zh="复制"
+                  data-en="Copy"
+                  title-zh="复制"
+                  title-en="Copy">复制</button>
+          <button type="button" class="btn-ghost"   id="pw-regen"
+                  data-zh="↻"
+                  data-en="↻"
+                  title-zh="重新生成"
+                  title-en="Regenerate">↻</button>
         </div>
 
         <!-- 强度条 -->
         <div class="pw-strength-row">
           <div class="pw-strength-bar"><div class="pw-strength-fill" id="pw-strength-fill"></div></div>
-          <span class="pw-strength-label" id="pw-strength-label">未生成</span>
+          <span class="pw-strength-label" id="pw-strength-label"
+                data-zh="未生成"
+                data-en="Not generated">未生成</span>
         </div>
 
         <!-- 长度 -->
         <div class="pw-control">
           <div class="pw-control-head">
-            <label for="pw-length">长度</label>
+            <label for="pw-length"
+                   data-zh="长度"
+                   data-en="Length">长度</label>
             <span class="pw-length-val" id="pw-length-val">16</span>
           </div>
           <input type="range" class="pw-slider" id="pw-length" min="4" max="64" step="1" value="16" />
@@ -125,54 +162,59 @@
 
         <!-- 字符集 -->
         <div class="pw-control">
-          <label>字符集</label>
+          <label data-zh="字符集" data-en="Charset">字符集</label>
           <div class="pw-charset">
             <label class="pw-check">
               <input type="checkbox" id="pw-upper" checked />
-              <span>大写 A-Z</span>
+              <span data-zh="大写 A-Z" data-en="Uppercase A-Z">大写 A-Z</span>
             </label>
             <label class="pw-check">
               <input type="checkbox" id="pw-lower" checked />
-              <span>小写 a-z</span>
+              <span data-zh="小写 a-z" data-en="Lowercase a-z">小写 a-z</span>
             </label>
             <label class="pw-check">
               <input type="checkbox" id="pw-digit" checked />
-              <span>数字 0-9</span>
+              <span data-zh="数字 0-9" data-en="Digits 0-9">数字 0-9</span>
             </label>
             <label class="pw-check">
               <input type="checkbox" id="pw-symbol" checked />
-              <span>符号 !@#…</span>
+              <span data-zh="符号 !@#…" data-en="Symbols !@#…">符号 !@#…</span>
             </label>
           </div>
         </div>
 
         <!-- 选项 -->
         <div class="pw-control">
-          <label>选项</label>
+          <label data-zh="选项" data-en="Options">选项</label>
           <div class="pw-charset">
             <label class="pw-check">
               <input type="checkbox" id="pw-no-ambiguous" />
-              <span>排除易混字符 (0OoIl1)</span>
+              <span data-zh="排除易混字符 (0OoIl1)" data-en="Exclude ambiguous (0OoIl1)">排除易混字符 (0OoIl1)</span>
             </label>
             <label class="pw-check">
               <input type="checkbox" id="pw-no-repeat" />
-              <span>字符不重复</span>
+              <span data-zh="字符不重复" data-en="No repeats">字符不重复</span>
             </label>
           </div>
         </div>
 
         <!-- 生成按钮 -->
         <div class="pw-generate-row">
-          <button type="button" class="btn-primary btn-large" id="pw-generate">🎲 生成密码</button>
+          <button type="button" class="btn-primary btn-large" id="pw-generate"
+                  data-zh="🎲 生成密码"
+                  data-en="🎲 Generate">🎲 生成密码</button>
         </div>
 
         <!-- 历史 -->
         <div class="pw-history">
           <div class="pw-history-head">
-            <label>本次会话历史</label>
-            <span class="meta" id="pw-history-count">0 条</span>
+            <label data-zh="本次会话历史"
+                   data-en="Session history">本次会话历史</label>
+            <span class="meta" id="pw-history-count"
+                  data-zh-template="0 条"
+                  data-en-template="0 entries">0 条</span>
           </div>
-          <ul class="pw-history-list" id="pw-history-list" aria-label="密码历史"></ul>
+          <ul class="pw-history-list" id="pw-history-list" aria-label-zh="密码历史" aria-label-en="Password history"></ul>
         </div>
       </article>
     </section>
@@ -183,13 +225,20 @@
     <section class="panel hidden" id="panel-codec" role="tabpanel" aria-labelledby="tab-codec">
 
       <!-- 模式选择 -->
-      <nav class="codec-tabs" role="tablist" aria-label="编码模式">
+      <nav class="codec-tabs" role="tablist"
+           aria-label-zh="编码模式"
+           aria-label-en="Encode mode">
         <button type="button" class="codec-tab" role="tab" aria-selected="true"  data-mode="base64">Base64</button>
-        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="url">URL Encode</button>
-        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="html">HTML Entity</button>
-        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="json">JSON 美化</button>
-        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="jwt">JWT 解析</button>
-        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="hash">文本 Hash</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="url"
+                data-zh="URL Encode" data-en="URL Encode">URL Encode</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="html"
+                data-zh="HTML Entity" data-en="HTML Entity">HTML Entity</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="json"
+                data-zh="JSON 美化" data-en="JSON Format">JSON 美化</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="jwt"
+                data-zh="JWT 解析" data-en="JWT Decode">JWT 解析</button>
+        <button type="button" class="codec-tab" role="tab" aria-selected="false" data-mode="hash"
+                data-zh="文本 Hash" data-en="Text Hash">文本 Hash</button>
       </nav>
 
       <article class="card single-card">
@@ -198,44 +247,73 @@
         <div class="codec-grid" id="codec-grid">
           <div class="codec-side">
             <div class="codec-side-head">
-              <label for="codec-input">原文</label>
+              <label for="codec-input"
+                     data-zh="原文"
+                     data-en="Input">原文</label>
               <div class="codec-side-actions">
-                <button type="button" class="btn-ghost btn-mini" id="codec-input-clear" title="清空">✕</button>
-                <button type="button" class="btn-ghost btn-mini" id="codec-input-paste" title="粘贴">📋</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-input-clear"
+                        data-zh="✕" data-en="✕"
+                        title-zh="清空" title-en="Clear">✕</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-input-paste"
+                        data-zh="📋" data-en="📋"
+                        title-zh="粘贴" title-en="Paste">📋</button>
               </div>
             </div>
-            <textarea class="codec-input" id="codec-input" placeholder="输入要编码或解码的文本…" spellcheck="false"></textarea>
-            <div class="codec-meta"><span id="codec-input-meta">0 字符</span></div>
+            <textarea class="codec-input" id="codec-input"
+                      data-zh-placeholder="输入要编码或解码的文本…"
+                      data-en-placeholder="Type text to encode/decode…"
+                      spellcheck="false"></textarea>
+            <div class="codec-meta"><span id="codec-input-meta"
+              data-zh-template="0 字符"
+              data-en-template="0 chars">0 字符</span></div>
           </div>
 
           <div class="codec-side">
             <div class="codec-side-head">
-              <label for="codec-output">结果</label>
+              <label for="codec-output"
+                     data-zh="结果"
+                     data-en="Output">结果</label>
               <div class="codec-side-actions">
-                <button type="button" class="btn-ghost btn-mini" id="codec-swap" title="交换">⇅</button>
-                <button type="button" class="btn-ghost btn-mini" id="codec-copy" title="复制">复制</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-swap"
+                        data-zh="⇅" data-en="⇅"
+                        title-zh="交换" title-en="Swap">⇅</button>
+                <button type="button" class="btn-ghost btn-mini" id="codec-copy"
+                        data-zh="复制"
+                        data-en="Copy"
+                        title-zh="复制" title-en="Copy">复制</button>
               </div>
             </div>
-            <textarea class="codec-output" id="codec-output" readonly placeholder="结果会显示在这里…" spellcheck="false"></textarea>
-            <div class="codec-meta"><span id="codec-output-meta">0 字符</span><span id="codec-status" class="codec-status"></span></div>
+            <textarea class="codec-output" id="codec-output" readonly
+                      data-zh-placeholder="结果会显示在这里…"
+                      data-en-placeholder="Result will appear here…"
+                      spellcheck="false"></textarea>
+            <div class="codec-meta">
+              <span id="codec-output-meta"
+                    data-zh-template="0 字符"
+                    data-en-template="0 chars">0 字符</span>
+              <span id="codec-status" class="codec-status"></span>
+            </div>
           </div>
         </div>
 
         <!-- 模式说明 -->
-        <div class="codec-help" id="codec-help">
-          提示：在左侧输入原文，右侧会自动显示编码或解码结果。点击 ⇅ 可把结果送到左边继续处理。
-        </div>
+        <div class="codec-help" id="codec-help"
+             data-zh="提示：在左侧输入原文，右侧会自动显示编码或解码结果。点击 ⇅ 可把结果送到左边继续处理。"
+             data-en="Hint: type on the left, the right side updates live. Click ⇅ to send the result back to the left.">提示：在左侧输入原文，右侧会自动显示编码或解码结果。点击 ⇅ 可把结果送到左边继续处理。</div>
       </article>
     </section>
 
     <footer class="foot">
-      <small>kk tools · 2026 · 纯前端，0 网络请求</small>
+      <small
+        data-zh="kk tools · 2026 · 纯前端，0 网络请求"
+        data-en="kk tools · 2026 · 100% frontend, 0 network requests">kk tools · 2026 · 纯前端，0 网络请求</small>
     </footer>
   </main>
 
   <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="lang.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
